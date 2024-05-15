@@ -1,15 +1,31 @@
+import 'dart:isolate';
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:http/http.dart';
 import 'package:moneymanagementapp/screens/expenseinput.dart';
+import 'package:web3dart/credentials.dart';
+import 'package:web3dart/web3dart.dart';
 
 class Core {
   var balance = 0.obs;
 
+  Web3Client web3client = Web3Client(
+      "https://5d9f-2405-201-e02a-80c0-c08-9fb8-690f-954d.ngrok-free.app/",
+      Client());
   var name = 'jana'.obs;
   var income = 0.obs;
   var expense = 0.obs;
   var transactions = [].obs;
   var transactionsOfMonth = [].obs;
   var activities = ['na'].obs;
+  var password = "";
+  Rx<Wallet?> wallet = Rx(null);
+  FlutterSecureStorage _flutterSecureStorage = FlutterSecureStorage();
 
   String getMonthName(int month) {
     switch (month) {
@@ -38,6 +54,36 @@ class Core {
       default:
         return 'DEC';
     }
+  }
+
+  createWallet() async {
+    final random = Random();
+
+    Wallet wallet =
+        Wallet.createNew(EthPrivateKey.createRandom(random), password, random);
+    this.wallet.value = wallet;
+    final walletJson = wallet.toJson();
+    final _auth = FirebaseAuth.instance;
+    final email = _auth.currentUser!.email;
+    await _flutterSecureStorage.write(
+        key: "WALLET${email!}", value: walletJson);
+    print(wallet.privateKey.address.hex);
+  }
+
+  Wallet walletFromJsonIsolate(String walletJson) =>
+      Wallet.fromJson(walletJson, password);
+
+  Future<bool> checkWalletExist() async {
+    final _auth = FirebaseAuth.instance;
+    final email = _auth.currentUser!.email;
+
+    final walletJson = await _flutterSecureStorage.read(key: "WALLET${email!}");
+    if (walletJson == null) {
+      wallet.value = null;
+      return false;
+    }
+    wallet.value = await Isolate.run(() => walletFromJsonIsolate(walletJson));
+    return true;
   }
 
   int getDaysCountByMonth(int month) {

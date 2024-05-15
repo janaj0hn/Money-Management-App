@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:moneymanagementapp/core/core.dart';
-import 'package:moneymanagementapp/screens/dashboard.dart';
+import 'package:moneymanagementapp/screens/nav.dart';
 
 class UserName extends StatefulWidget {
   const UserName({super.key});
@@ -22,7 +22,9 @@ class _UserNameState extends State<UserName> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text('enter your name'),
               TextField(
                 controller: _nameEditingController,
                 decoration: InputDecoration(hintText: 'name'),
@@ -32,10 +34,10 @@ class _UserNameState extends State<UserName> {
                     core.name.value = _nameEditingController.text;
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return DashBoardScreen();
+                      return Nav();
                     }));
                   },
-                  child: Text('create'))
+                  child: Text('continue'))
             ],
           ),
         ),

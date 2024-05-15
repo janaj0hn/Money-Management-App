@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:moneymanagementapp/chat-bot/chat-brain.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:moneymanagementapp/core/core.dart';
 import 'package:moneymanagementapp/screens/expenseinput.dart';
 import 'package:moneymanagementapp/screens/total.dart';
@@ -21,24 +22,24 @@ class DashBoardScreen extends StatefulWidget {
 class _DashBoardScreenState extends State<DashBoardScreen> {
   final core = Get.find<Core>();
   var currentDatetime = DateTime.now();
-  // final _auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
 
-  // late User loggedInUser;
+  late User loggedInUser;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // getUser();
+    getUser();
     core.getTransactionsByMon(DateTime.now().month);
   }
 
-  // void getUser() async {
-  //   final newuser = await _auth.currentUser;
-  //   if (newuser != null) {
-  //     loggedInUser = newuser;
-  //   }
-  // }
+  void getUser() async {
+    final newuser = await _auth.currentUser;
+    if (newuser != null) {
+      loggedInUser = newuser;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,33 +69,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 ))
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            selectedItemColor: Colors.purple[900],
-            unselectedItemColor: Colors.grey,
-            items: [
-              BottomNavigationBarItem(
-                  label: 'Home',
-                  icon: Icon(
-                    Icons.home,
-                  )),
-              BottomNavigationBarItem(
-                  label: 'shareTr',
-                  icon: Icon(
-                    Icons.stacked_line_chart_outlined,
-                  )),
-              BottomNavigationBarItem(
-                  label: 'support',
-                  icon: Icon(
-                    Icons.support_agent_outlined,
-                  )),
-              BottomNavigationBarItem(
-                  label: 'profile',
-                  icon: Icon(
-                    Icons.account_circle_rounded,
-                  )),
-            ]),
         floatingActionButton: FloatingActionButton.extended(
             label: Text('add transaction'),
             icon: Icon(
@@ -118,7 +92,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 itemCount: core.getLast3Month().length,
                 itemBuilder: (context, index) => Container(
                   margin: EdgeInsets.symmetric(horizontal: 5),
-                  width: 100,
+                  width: 110,
                   height: 40,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(
@@ -284,6 +258,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                   ],
                                 ),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                         core.transactions[index]['des']
@@ -302,19 +278,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       },
                     ),
                   )),
-              Row(
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return Home();
-                          },
-                        ));
-                      },
-                      child: Text('chat'))
-                ],
-              )
             ]),
           ]),
         ),

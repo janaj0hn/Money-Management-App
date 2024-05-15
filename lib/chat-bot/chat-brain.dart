@@ -25,6 +25,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('support'),
         foregroundColor: Colors.white,
       ),
@@ -47,7 +48,10 @@ class _HomeState extends State<Home> {
                         sendMessage(_controller.text);
                         _controller.clear();
                       },
-                      icon: Icon(Icons.send))
+                      icon: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ))
                 ],
               ),
             )

@@ -22,7 +22,7 @@ class _Page3State extends State<Page3> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image.asset('images/page3.png'),
+            Image.asset('assets/page3.png'),
             Text(
               'Be easier to manage your own money with us ',
               style: KHeroBH,

@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:moneymanagementapp/Cryptopricetracker/api.dart';
 import 'package:moneymanagementapp/chat-bot/chat-brain.dart';
 
+import 'package:moneymanagementapp/cryptowallet/cryptowallet.dart';
+
 import 'package:moneymanagementapp/screens/dashboard.dart';
-import 'package:moneymanagementapp/screens/sharetracker.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,7 @@ class Nav extends StatefulWidget {
 class _NavState extends State<Nav> {
   int currentindex = 0;
 
-  final screens = [DashBoardScreen(), SharetrackerScreen(), Home()];
+  final screens = [DashBoardScreen(), ApiScreen(), Home(), CryptoWallet()];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -39,11 +41,15 @@ class _NavState extends State<Nav> {
               NavigationDestination(
                   selectedIcon: Icon(Icons.swap_calls_outlined),
                   icon: Icon(Icons.swap_calls_outlined),
-                  label: 'StockTracker'),
+                  label: 'apiTracker'),
               NavigationDestination(
                   selectedIcon: Icon(Icons.support_agent_outlined),
                   icon: Icon(Icons.support_agent_outlined),
                   label: 'support'),
+              NavigationDestination(
+                  selectedIcon: Icon(Icons.currency_rupee_outlined),
+                  icon: Icon(Icons.currency_rupee_outlined),
+                  label: 'Wallet'),
             ]),
       ),
     );
